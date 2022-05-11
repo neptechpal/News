@@ -1,6 +1,6 @@
-# newsapp
+Restapi integration - News app
 
-A new Flutter project.
+Video Tutorial : https://youtu.be/avd6pVSyLs8
 
 ## Getting Started
 
