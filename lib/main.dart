@@ -1,14 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:newsapp/screens/home_screen.dart';
+import 'package:newsapp/screens/notification.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
+import './utilities/globals.dart' as globals;
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+    OneSignal.shared
+        .setNotificationOpenedHandler((OSNotificationOpenedResult result) {
+      debugPrint('NOTIFICATION OPENED HANDLER CALLED WITH: $result');
+      setState(() {});
+      globals.appnavigator.currentState
+          ?.push(MaterialPageRoute(builder: (context) => const NotificationHome()));
+    });
+
+    OneSignal.shared.setNotificationWillShowInForegroundHandler(
+        (OSNotificationReceivedEvent event) {
+      
+      setState(() {});
+    });
+
+    await OneSignal.shared.setAppId("d27b4c45-540c-41fb-b0c2-0f92cd13a664");
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
